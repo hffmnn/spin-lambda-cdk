@@ -1,0 +1,9 @@
+@baseUrl=
+### First
+GET {{baseUrl}}/first HTTP/1.1
+
+### Second
+GET {{baseUrl}}/second HTTP/1.1
+
+### kv explorer
+GET {{baseUrl}}/internal/kv-explorer HTTP/1.1

@@ -1,0 +1,46 @@
+spin_manifest_version = 2
+
+[application]
+name = "spin-rust-lambda-cdk"
+version = "0.1.0"
+authors = ["Christian Hoffmann <hffmnn@googlemail.com>"]
+description = ""
+
+[[trigger.http]]
+route = "/first"
+component = "spin-rust-lambda-cdk"
+
+[component.spin-rust-lambda-cdk]
+source = "target/wasm32-wasi/release/spin_rust_lambda_cdk.wasm"
+allowed_outbound_hosts = []
+key_value_stores = ["default"]
+[component.spin-rust-lambda-cdk.build]
+command = "cargo build --target wasm32-wasi --release"
+watch = ["src/**/*.rs", "Cargo.toml"]
+
+[[trigger.http]]
+route = "/second"
+component = "second"
+
+[component.second]
+source = "second/target/wasm32-wasi/release/second.wasm"
+allowed_outbound_hosts = []
+[component.second.build]
+command = "cargo build --target wasm32-wasi --release"
+workdir = "second"
+watch = ["src/**/*.rs", "Cargo.toml"]
+
+[[trigger.http]]
+component = "kv-explorer"
+route = "/internal/kv-explorer/..."
+
+[component.kv-explorer]
+source = { url = "https://github.com/fermyon/spin-kv-explorer/releases/download/v0.10.0/spin-kv-explorer.wasm", digest = "sha256:65bc286f8315746d1beecd2430e178f539fa487ebf6520099daae09a35dbce1d" }
+key_value_stores = ["default"]
+
+[component.kv-explorer.variables]
+kv_credentials = "{{ kv_explorer_user }}:{{ kv_explorer_password }}"
+
+[variables]
+kv_explorer_user = { required = true }
+kv_explorer_password = { required = true }
