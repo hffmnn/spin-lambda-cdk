@@ -1,5 +1,2 @@
-export class Hello {
-  public sayHello() {
-    return 'hello, world!';
-  }
-}
+export { SpinLambdaFunction } from "./spin-lambda-cdk";
+export { getSpin } from "./download";
